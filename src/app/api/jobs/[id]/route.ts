@@ -62,6 +62,7 @@
 
 
 // src/app/api/jobs/[id]/route.ts// src/app/api/jobs/[id]/route.ts
+export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import { db } from '../../../../lib/db'
