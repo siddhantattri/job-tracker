@@ -1,46 +1,47 @@
 // src/app/api/jobs/[id]/route.ts
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { db } from '../../../../lib/db'
 import { jobs } from '../../../../lib/db/schema'
 import { eq } from 'drizzle-orm'
 
 // Helper to extract params.id whether params is Promise or plain object
-async function getId(params: unknown): Promise<string> {
-  // await Promise.resolve(...) works if params is a Promise or a raw object
-  const resolved = await Promise.resolve(params)
-  return (resolved as { id: string }).id
-}
-
-export async function DELETE(
-  _req: Request,
-  { params }: { params: unknown }
-) {
-  const id = await getId(params)
-  await db.delete(jobs).where(eq(jobs.id, Number(id)))
-  return NextResponse.json({ success: true })
-}
+// async function getId(params: unknown): Promise<string> {
+//   // await Promise.resolve(...) works if params is a Promise or a raw object
+//   const resolved = await Promise.resolve(params)
+//   return (resolved as { id: string }).id
+// }
 
 export async function GET(
-  _req: Request,
-  { params }: { params: unknown }
+  req: NextRequest,
+  { params }: { params: { id: string } }      // ← now correctly typed
 ) {
-  const id = await getId(params)
+  const id = Number(params.id)
   const [job] = await db
     .select()
     .from(jobs)
-    .where(eq(jobs.id, Number(id)))
+    .where(eq(jobs.id, id))
     .limit(1)
+
   if (!job) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
   return NextResponse.json(job)
 }
 
-export async function PUT(
-  req: Request,
-  { params }: { params: unknown }
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }      // ← same here
 ) {
-  const id = await getId(params)
+  const id = Number(params.id)
+  await db.delete(jobs).where(eq(jobs.id, id))
+  return NextResponse.json({ success: true })
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }      // ← and here
+) {
+  const id = Number(params.id)
   const body = await req.json()
   const [updated] = await db
     .update(jobs)
@@ -50,8 +51,9 @@ export async function PUT(
       status: body.status,
       dateApplied: body.dateApplied,
     })
-    .where(eq(jobs.id, Number(id)))
+    .where(eq(jobs.id, id))
     .returning()
+
   if (!updated) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
