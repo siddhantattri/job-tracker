@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import { JobsProvider, useJobs } from '../../context/JobsContext';
+import { Job, useJobs } from '../../context/JobsContext';
 import { useRouter } from 'next/navigation';
 import {
   Box,
@@ -18,7 +18,7 @@ import {
   TableRow,
   TableCell,
   CircularProgress,
-  Typography,
+  Typography
 } from '@mui/material';
 
 export default function JobsTable() {
@@ -43,6 +43,10 @@ export default function JobsTable() {
     await deleteJob(id);
   };
 
+  // const handleSortFieldChange = (e: SelectChangeEvent<keyof Job>) => {
+  //   setSortField(e.target.value);
+  // };
+  
   const handleEdit = (id: number) => {
     router.push(`/jobs/${id}/edit`);
   };
@@ -104,7 +108,7 @@ export default function JobsTable() {
           <Select
             label="Sort By"
             value={sortField}
-            onChange={(e) => setSortField(e.target.value as any)}
+            onChange={e => setSortField(e.target.value as keyof Job)}
           >
             <MenuItem value="company">Company</MenuItem>
             <MenuItem value="position">Position</MenuItem>

@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
 import { jobs } from '../../../lib/db/schema';
-import { asc, desc } from 'drizzle-orm';
+import {  desc } from 'drizzle-orm';
 // GET /api/jobs
 export async function GET() {
   const allJobs = await db.select().from(jobs).orderBy(desc(jobs.createdAt));

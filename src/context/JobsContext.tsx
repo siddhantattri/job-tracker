@@ -64,8 +64,11 @@ export function JobsProvider({ children }: { children: ReactNode }) {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data: Job[] = await res.json();
       setJobs(data);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      // If it really is an Error, use its message; otherwise stringify
+      const message =
+        e instanceof Error ? e.message : String(e);
+      setError(message);
     } finally {
       setLoading(false);
     }
