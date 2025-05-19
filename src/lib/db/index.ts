@@ -15,6 +15,8 @@
 // src/lib/db/index.ts
 
 // src/lib/db/index.ts
+// src/lib/db/index.ts
+
 import Database from 'better-sqlite3'
 import { drizzle as drizzleSQLite } from 'drizzle-orm/better-sqlite3'
 import { jobs } from './schema'
@@ -22,18 +24,23 @@ import { jobs } from './schema'
 import { RDSDataClient } from '@aws-sdk/client-rds-data'
 import { drizzle as drizzleDataApi } from 'drizzle-orm/aws-data-api/pg'
 
-export const db = process.env.NODE_ENV === 'production'
+// 1) Compute the local SQLite driver type
+type LocalDb = ReturnType<typeof drizzleSQLite>
+
+// 2) Export `db` as that single type
+export const db: LocalDb = process.env.NODE_ENV === 'production'
   ? (() => {
-      // region comes from the Lambda runtime; no need to set it yourself
       const client = new RDSDataClient({ region: process.env.AWS_REGION })
-      return drizzleDataApi(client, {
+      const dataApiDb = drizzleDataApi(client, {
         database:    process.env.RDS_DB_NAME!,
         resourceArn: process.env.RDS_CLUSTER_ARN!,
         secretArn:   process.env.RDS_SECRET_ARN!,
         schema:      { jobs },
       })
+      // 3) Cast the Data API instance to our LocalDb type
+      return dataApiDb as unknown as LocalDb
     })()
-  : (() => {
-      const sqlite = new Database('db.sqlite')
-      return drizzleSQLite(sqlite, { schema: { jobs } })
-    })()
+  : drizzleSQLite(
+      new Database('db.sqlite'),
+      { schema: { jobs } }
+    )
