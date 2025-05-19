@@ -12,6 +12,7 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@aws-sdk/client-rds-data": "^3.812.0",
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -20,7 +21,6 @@
     "@mui/material-nextjs": "^7.1.0",
     "better-sqlite3": "^11.10.0",
     "dotenv": "^16.5.0",
-    "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.43.1",
     "next": "15.3.2",
     "react": "^19.0.0",
@@ -33,6 +33,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.1",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "tailwindcss": "^4",
