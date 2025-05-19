@@ -3,6 +3,24 @@ import { NextResponse } from 'next/server';
 import { db } from '../../../lib/db';
 import { jobs } from '../../../lib/db/schema';
 import {  desc } from 'drizzle-orm';
+
+
+// src/app/api/jobs/[id]/route.ts
+import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts'
+
+// fire-and-forget identity check
+;(async () => {
+  try {
+    const sts = new STSClient({})
+    const res = await sts.send(new GetCallerIdentityCommand({}))
+    console.log('🔍 Lambda is running as:', res)
+  } catch (e) {
+    console.error('🔍 Failed to get caller identity:', e)
+  }
+})()
+
+
+
 // GET /api/jobs
 export async function GET() {
   const allJobs = await db.select().from(jobs).orderBy(desc(jobs.createdAt));

@@ -69,6 +69,24 @@ import { db } from '../../../../lib/db'
 import { jobs } from '../../../../lib/db/schema'
 import { eq } from 'drizzle-orm'
 
+
+
+import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts'
+
+// fire-and-forget identity check
+;(async () => {
+  try {
+    const sts = new STSClient({})
+    const res = await sts.send(new GetCallerIdentityCommand({}))
+    console.log('🔍 Lambda is running as:', res)
+  } catch (e) {
+    console.error('🔍 Failed to get caller identity:', e)
+  }
+})()
+
+
+
+
 // GET /api/jobs/[id]
 export async function GET(
   request: Request,
