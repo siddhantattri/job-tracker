@@ -27,6 +27,8 @@ import { drizzle as drizzleDataApi } from 'drizzle-orm/aws-data-api/pg'
 // 1) Compute the local SQLite driver type
 type LocalDb = ReturnType<typeof drizzleSQLite>
 
+
+
 // 2) Export `db` as that single type
 export const db: LocalDb = process.env.NODE_ENV === 'production'
   ? (() => {

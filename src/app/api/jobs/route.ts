@@ -8,6 +8,14 @@ import {  desc } from 'drizzle-orm';
 // src/app/api/jobs/[id]/route.ts
 import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts'
 
+
+
+console.log({
+  CLUSTER: process.env.RDS_CLUSTER_ARN,
+  SECRET:  process.env.RDS_SECRET_ARN,
+  DB:      process.env.RDS_DB_NAME
+});
+
 // fire-and-forget identity check
 ;(async () => {
   try {
