@@ -42,8 +42,8 @@ export const db: LocalDb = process.env.NODE_ENV === 'production'
 
       const dataApiDb = drizzleDataApi(client, {
         database:    'job-tracker-prod',
-        resourceArn: 'arn:aws:rds:ap-northeast-1:123456789012:cluster:job-tracker-prod',
-        secretArn:  'arn:aws:secretsmanager:ap-northeast-1:123456789012:secret:rds!cluster-9f020a8a-e410-4fb9-9d21-eae68fa77b9b-uebBrU',
+        resourceArn: 'arn:aws:rds:ap-northeast-1:693789331812:cluster:job-tracker-prod',
+        secretArn:  'arn:aws:secretsmanager:ap-northeast-1:693789331812:secret:rds!cluster-9f020a8a-e410-4fb9-9d21-eae68fa77b9b-uebBrU',
         schema:      { jobs },
       })
       // 3) Cast the Data API instance to our LocalDb type
