@@ -3,9 +3,11 @@
 
 import Link from 'next/link';
 import { Button, Box, Typography } from '@mui/material';
-
+import { Providers } from './providers';
 export default function HomePage() {
   return (
+
+    <Providers>
     <Box
       sx={{
         minHeight: '100vh',
@@ -24,5 +26,6 @@ export default function HomePage() {
         </Button>
       </Link>
     </Box>
+    </Providers>
   );
 }

@@ -4,13 +4,13 @@
 'use client';
 
 import JobsTable from './JobsTable';
-import { JobsProvider } from '../../context/JobsContext';
+// import { JobsProvider } from '../../context/JobsContext';
 import Link from 'next/link';
 import { Box, Button, Typography } from '@mui/material';
 
 export default function JobsPage() {
   return (
-     <JobsProvider>
+    //  <JobsProvider>
       <Box sx={{ p: 4 }}>
         <Box
           sx={{
@@ -28,6 +28,6 @@ export default function JobsPage() {
 
         <JobsTable />
       </Box>
-    </JobsProvider>
+    // </JobsProvider>
   );
 }

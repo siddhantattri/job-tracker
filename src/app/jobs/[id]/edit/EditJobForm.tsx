@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useJobs } from '../../../../context/JobsContext';
 import {
   Box,
   TextField,
@@ -30,6 +31,11 @@ interface EditJobFormProps {
 
 export default function EditJobForm({ initialJob }: EditJobFormProps) {
   const router = useRouter();
+  const { updateJob } = useJobs();
+
+
+
+
 
   const [exists, setExists] = useState<boolean | null>(null);
   const [saving, setSaving] = useState(false);
@@ -65,17 +71,35 @@ export default function EditJobForm({ initialJob }: EditJobFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    const res = await fetch(`/api/jobs/${initialJob.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ company, position, status, dateApplied }),
-    });
-    setSaving(false);
-    if (res.ok) router.push('/jobs');
-    else {
-      const err = await res.json();
-      alert(`Error: ${err.error}`);
-    }
+
+
+
+    // const res = await fetch(`/api/jobs/${initialJob.id}`, {
+    //   method: 'PUT',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ company, position, status, dateApplied }),
+    // });
+    // setSaving(false);
+    // if (res.ok) router.push('/jobs');
+    // else {
+    //   const err = await res.json();
+    //   alert(`Error: ${err.error}`);
+    // }
+
+ // This both calls your API and immutably patches `jobs` in context:
+     await updateJob({
+        id: initialJob.id,
+        company,
+        position,
+        status,
+        dateApplied,
+        createdAt: (initialJob as any).createdAt ?? '',
+        updatedAt: new Date().toISOString(),
+      });
+      setSaving(false);
+      // now context.jobs is up-to-date → navigate home:
+      router.push('/jobs');
+
   };
 
   if (saving) {

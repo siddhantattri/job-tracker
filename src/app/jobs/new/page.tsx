@@ -4,6 +4,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {useJobs} from '../../../context/JobsContext';
 import {
   Box,
   TextField,
@@ -16,6 +17,8 @@ import {
 } from '@mui/material';
 
 export default function NewJobPage() {
+
+  const {addJob} = useJobs();
   const router = useRouter();
   const [company, setCompany] = useState('');
   const [position, setPosition] = useState('');
@@ -24,18 +27,23 @@ export default function NewJobPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch('/api/jobs', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ company, position, status, dateApplied }),
-    });
-    if (res.ok) {
+    // const res = await fetch('/api/jobs', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ company, position, status, dateApplied }),
+    // });
+    // if (res.ok) {
       
-      router.push('/jobs');
+    //   router.push('/jobs');
       
-    } else {
-      alert('Failed to create job');
-    }
+    // } else {
+    //   alert('Failed to create job');
+    // }
+
+    // Calls API **and** updates context.jobs in one go:
+   await addJob({ company, position, status, dateApplied });
+   // Now context.filteredJobs includes the new job → navigate:
+  router.push('/jobs');
   };
 
   return (
